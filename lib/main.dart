@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quizzler/question.dart';
+import 'package:quizzler/quizeBrain.dart';
+
+QuizBrain _quizBrain = QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -43,19 +45,19 @@ class _QuizPageState extends State<QuizPage> {
 //    a: false,
 //  );
 
-  List<Question> questionsWithAnswer = [
-    Question(
-      q: 'You can lead a cow down stairs but not up stairs.',
-      a: false,
-    ),
-    Question(
-        q: 'Approximately one quarter of human bones are in the feet.',
-        a: true),
-    Question(
-      q: 'A slug\'s blood is green.',
-      a: true,
-    )
-  ];
+//  List<Question> questionsWithAnswer = [
+//    Question(
+//      q: 'You can lead a cow down stairs but not up stairs.',
+//      a: false,
+//    ),
+//    Question(
+//        q: 'Approximately one quarter of human bones are in the feet.',
+//        a: true),
+//    Question(
+//      q: 'A slug\'s blood is green.',
+//      a: true,
+//    )
+//  ];
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questionsWithAnswer[questionNumber].questionText,
+                _quizBrain.questionsWithAnswer[questionNumber].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -104,8 +106,8 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                bool correctAnswer =
-                    questionsWithAnswer[questionNumber].questionAnswer;
+                bool correctAnswer = _quizBrain
+                    .questionsWithAnswer[questionNumber].questionAnswer;
                 if (correctAnswer == true) {
                   totalScore++;
                 }
@@ -137,8 +139,8 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                bool correctAnswer =
-                    questionsWithAnswer[questionNumber].questionAnswer;
+                bool correctAnswer = _quizBrain
+                    .questionsWithAnswer[questionNumber].questionAnswer;
                 if (correctAnswer == false) {
                   totalScore++;
                 }
