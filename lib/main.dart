@@ -33,32 +33,31 @@ class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
   int totalNoOfQuestions = quizBrain.getTotalNoOfQuestions();
 
-//  List<String> questions = [
-//    'You can lead a cow down stairs but not up stairs.',
-//    'Approximately one quarter of human bones are in the feet.',
-//    'A slug\'s blood is green.',
-//  ];
-//
-//  List<bool> answers = [false, true, true];
-//
-//  Question q1 = Question(
-//    q: 'You can lead a cow down stairs but not up stairs.',
-//    a: false,
-//  );
+  void checkAnswer(bool userPickedAnswer) {
+    if (!quizBrain.checkMaxLimit()) {
+      bool correctAnswer = quizBrain.getQuestionAnswer();
+      setState(() {
+        if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+        } else {
+          scoreKeeper.add(
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+        }
 
-//  List<Question> questionsWithAnswer = [
-//    Question(
-//      q: 'You can lead a cow down stairs but not up stairs.',
-//      a: false,
-//    ),
-//    Question(
-//        q: 'Approximately one quarter of human bones are in the feet.',
-//        a: true),
-//    Question(
-//      q: 'A slug\'s blood is green.',
-//      a: true,
-//    )
-//  ];
+        quizBrain.nextNumber();
+        questionNumber = quizBrain.getCurrentQuestion();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,22 +106,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                setState(() {
-                  if (!quizBrain.checkMaxLimit()) {
-                    bool correctAnswer = quizBrain.getQuestionAnswer();
-                    if (correctAnswer == true) {
-                      totalScore++;
-                    }
-                    scoreKeeper.add(
-                      Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                  }
-                  quizBrain.nextNumber();
-                  questionNumber = quizBrain.getCurrentQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -141,22 +125,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                setState(() {
-                  if (!quizBrain.checkMaxLimit()) {
-                    bool correctAnswer = quizBrain.getQuestionAnswer();
-                    if (correctAnswer == false) {
-                      totalScore++;
-                    }
-                    scoreKeeper.add(
-                      Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    );
-                    quizBrain.nextNumber();
-                    questionNumber = quizBrain.getCurrentQuestion();
-                  }
-                });
+                checkAnswer(false);
               },
             ),
           ),
