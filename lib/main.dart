@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quizeBrain.dart';
 
-QuizBrain _quizBrain = QuizBrain();
+QuizBrain quizBrain = QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -31,6 +31,7 @@ class _QuizPageState extends State<QuizPage> {
   int questionNumber = 0;
   int totalScore = 0;
   List<Icon> scoreKeeper = [];
+  int totalNoOfQuestions = quizBrain.getTotalNoOfQuestions();
 
 //  List<String> questions = [
 //    'You can lead a cow down stairs but not up stairs.',
@@ -68,7 +69,7 @@ class _QuizPageState extends State<QuizPage> {
         Row(
           children: <Widget>[
             Text(
-              'No of Questions Answered $questionNumber/10',
+              'No of Questions Answered $questionNumber/$totalNoOfQuestions',
               style: TextStyle(
                 color: Colors.white,
               ),
@@ -81,7 +82,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                _quizBrain.questionsWithAnswer[questionNumber].questionText,
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -106,20 +107,21 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                bool correctAnswer = _quizBrain
-                    .questionsWithAnswer[questionNumber].questionAnswer;
-                if (correctAnswer == true) {
-                  totalScore++;
-                }
-
                 setState(() {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ),
-                  );
-                  questionNumber++;
+                  if (!quizBrain.checkMaxLimit()) {
+                    bool correctAnswer = quizBrain.getQuestionAnswer();
+                    if (correctAnswer == true) {
+                      totalScore++;
+                    }
+                    scoreKeeper.add(
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  }
+                  quizBrain.nextNumber();
+                  questionNumber = quizBrain.getCurrentQuestion();
                 });
               },
             ),
@@ -139,20 +141,21 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                bool correctAnswer = _quizBrain
-                    .questionsWithAnswer[questionNumber].questionAnswer;
-                if (correctAnswer == false) {
-                  totalScore++;
-                }
-
                 setState(() {
-                  scoreKeeper.add(
-                    Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-                  );
-                  questionNumber++;
+                  if (!quizBrain.checkMaxLimit()) {
+                    bool correctAnswer = quizBrain.getQuestionAnswer();
+                    if (correctAnswer == false) {
+                      totalScore++;
+                    }
+                    scoreKeeper.add(
+                      Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
+                    quizBrain.nextNumber();
+                    questionNumber = quizBrain.getCurrentQuestion();
+                  }
                 });
               },
             ),
