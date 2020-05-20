@@ -67,9 +67,13 @@ class QuizBrain {
 
   bool checkMaxLimit() {
     bool limitCheck = false;
-    if (_questionNum == (_quizeBrain.length - 1)) {
+    if (_questionNum >= (_quizeBrain.length - 1)) {
       limitCheck = true;
     }
     return limitCheck;
+  }
+
+  void reset() {
+    _questionNum = 0;
   }
 }
